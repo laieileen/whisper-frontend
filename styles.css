@@ -1,0 +1,307 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #4a4a4a;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+h1 {
+    font-size: 3em;
+    color: #6b5d52;
+    font-weight: 300;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.1em;
+    color: #9b8b7e;
+    font-style: italic;
+    font-weight: 300;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Jar */
+.jar-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.jar {
+    width: 200px;
+    height: 300px;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+}
+
+/* Submit Section */
+.submit-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+textarea {
+    padding: 15px;
+    border: 2px solid #e0d5c7;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1em;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.3s;
+    background: #fafaf8;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #9b8b7e;
+    background: white;
+}
+
+.form-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.char-count {
+    font-size: 0.9em;
+    color: #b0a0a0;
+}
+
+.btn-submit {
+    padding: 12px 30px;
+    background: #6b5d52;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-weight: 500;
+}
+
+.btn-submit:hover {
+    background: #5a4e45;
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* Status Messages */
+.status-message {
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.95em;
+    display: none;
+}
+
+.status-message.success {
+    display: block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+}
+
+.status-message.error {
+    display: block;
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef5350;
+}
+
+/* Messages Section */
+.messages-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.messages-section h2 {
+    font-size: 1.5em;
+    color: #6b5d52;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.btn-fetch {
+    padding: 10px 25px;
+    background: #9b8b7e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.btn-fetch:hover {
+    background: #8b7d72;
+}
+
+.btn-fetch:active {
+    transform: scale(0.98);
+}
+
+/* Loading State */
+.loading-container {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.loading-container.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0d5c7;
+    border-top: 4px solid #9b8b7e;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-container p {
+    color: #9b8b7e;
+    font-style: italic;
+}
+
+/* Messages Container */
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message-item {
+    background: #f9f7f5;
+    padding: 16px;
+    border-radius: 8px;
+    border-left: 4px solid #9b8b7e;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-text {
+    color: #4a4a4a;
+    line-height: 1.6;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+}
+
+.message-time {
+    font-size: 0.85em;
+    color: #b0a0a0;
+}
+
+.empty-message {
+    text-align: center;
+    color: #9b8b7e;
+    padding: 30px 20px;
+    font-style: italic;
+}
+
+/* Error Message */
+.error-message {
+    background: #ffebee;
+    color: #c62828;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ef5350;
+    margin-top: 15px;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px 0;
+    color: #9b8b7e;
+    font-size: 0.95em;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.2em;
+        letter-spacing: 2px;
+    }
+
+    .submit-section,
+    .messages-section {
+        padding: 20px;
+    }
+
+    .jar {
+        width: 160px;
+        height: 240px;
+    }
+
+    textarea {
+        font-size: 16px;
+        min-height: 80px;
+    }
+}

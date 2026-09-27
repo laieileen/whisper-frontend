@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper - Anonymous Messages</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Whisper</h1>
+            <p class="subtitle">Leave something unsaid</p>
+        </header>
+
+        <main>
+            <!-- Jar Visual -->
+            <div class="jar-container">
+                <svg class="jar" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Jar lid -->
+                    <rect x="60" y="20" width="80" height="15" rx="2" fill="#d4a574" stroke="#8b6914"
+                        stroke-width="2" />
+                    <rect x="55" y="35" width="90" height="8" rx="2" fill="#c9985f" stroke="#8b6914" stroke-width="1" />
+
+                    <!-- Jar body -->
+                    <path d="M 60 43 L 50 80 Q 50 260 100 270 Q 150 260 150 80 L 140 43 Z" fill="#f5f1e8"
+                        stroke="#8b7355" stroke-width="2" />
+
+                    <!-- Jar shine/glass effect -->
+                    <ellipse cx="75" cy="100" rx="15" ry="40" fill="white" opacity="0.1" />
+
+                    <!-- Messages container (dynamic) -->
+                    <g id="messages-jar"></g>
+                </svg>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <form id="submitForm">
+                    <textarea id="messageInput" placeholder="What's unsaid?" maxlength="500" required></textarea>
+                    <div class="form-bottom">
+                        <span class="char-count"><span id="charCount">0</span>/500</span>
+                        <button type="submit" class="btn-submit">Leave a message</button>
+                    </div>
+                </form>
+                <div id="submitStatus" class="status-message"></div>
+            </div>
+
+            <!-- Messages Display Section -->
+            <div class="messages-section">
+                <h2>Messages in the jar</h2>
+                <button id="fetchBtn" class="btn-fetch">Peek inside</button>
+
+                <div id="loadingContainer" class="loading-container hidden">
+                    <div class="spinner"></div>
+                    <p>Waking up the jar...</p>
+                </div>
+
+                <div id="messagesContainer" class="messages-container"></div>
+
+                <div id="errorContainer" class="error-message hidden"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>All messages are anonymous and will be treasured</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
