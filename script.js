@@ -10,6 +10,41 @@ const fetchBtn = document.getElementById('fetchBtn');
 const loadingContainer = document.getElementById('loadingContainer');
 const messagesContainer = document.getElementById('messagesContainer');
 const errorContainer = document.getElementById('errorContainer');
+let lastDrawnMessageKey = null;
+
+class ApiError extends Error {
+    constructor(status) {
+        super(`Request failed with status ${status}`);
+        this.status = status;
+    }
+}
+
+async function requestJson(url, options) {
+    const response = await fetch(url, options);
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+        throw new ApiError(response.status);
+    }
+
+    return data;
+}
+
+function friendlyRequestError(error, action) {
+    if (error instanceof ApiError && error.status >= 500) {
+        return 'The jar’s storage shelf is unavailable right now. Try again later.';
+    }
+
+    if (error instanceof ApiError) {
+        return action === 'submit'
+            ? 'The jar couldn’t accept that note. Please try again.'
+            : 'The jar couldn’t open its messages. Please try again.';
+    }
+
+    return action === 'submit'
+        ? 'Couldn’t reach the jar. We couldn’t confirm your note was saved.'
+        : 'Couldn’t reach the jar. Check your connection and try again.';
+}
 
 // Character counter
 messageInput.addEventListener('input', (e) => {
@@ -28,7 +63,7 @@ submitForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        const response = await fetch(`${BACKEND_URL}/submit`, {
+        await requestJson(`${BACKEND_URL}/submit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -36,45 +71,29 @@ submitForm.addEventListener('submit', async (e) => {
             body: JSON.stringify({ text })
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to submit message');
-        }
-
         showStatus('✨ Message left in the jar', 'success');
         messageInput.value = '';
         charCount.textContent = '0';
 
-        // Auto-fetch messages after submit
-        setTimeout(() => {
-            fetchMessages();
-        }, 500);
-
     } catch (error) {
         console.error('Error:', error);
-        showStatus('Oops! Couldn\'t save your message. Try again?', 'error');
+        showStatus(friendlyRequestError(error, 'submit'), 'error');
     }
 });
 
 // Fetch Messages
-fetchBtn.addEventListener('click', fetchMessages);
+fetchBtn.addEventListener('click', drawNote);
 
-async function fetchMessages() {
+async function drawNote() {
     showLoading(true);
     clearError();
-    messagesContainer.innerHTML = '';
 
     try {
-        const response = await fetch(`${BACKEND_URL}/messages`);
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch messages');
-        }
-
-        const data = await response.json();
+        const data = await requestJson(`${BACKEND_URL}/messages`);
         showLoading(false);
 
-        if (data.messages && data.messages.length > 0) {
-            displayMessages(data.messages);
+        if (Array.isArray(data?.messages) && data.messages.length > 0) {
+            displayMessage(drawRandomMessage(data.messages));
         } else {
             messagesContainer.innerHTML = '<div class="empty-message">The jar is waiting for its first whisper...</div>';
         }
@@ -83,36 +102,48 @@ async function fetchMessages() {
         console.error('Error:', error);
         showLoading(false);
 
-        // Check if it's a backend connection error
-        if (error.message === 'Failed to fetch') {
-            showError('The server is sleeping. This can take 30 seconds on first load. Try again?');
-        } else {
-            showError('Couldn\'t peek inside the jar. Try again?');
-        }
+        showError(friendlyRequestError(error, 'fetch'));
     }
 }
 
-function displayMessages(messages) {
+function drawRandomMessage(messages) {
+    const availableMessages = messages.filter((message) => getMessageKey(message) !== lastDrawnMessageKey);
+    const choices = availableMessages.length > 0 ? availableMessages : messages;
+    const message = choices[Math.floor(Math.random() * choices.length)];
+    lastDrawnMessageKey = getMessageKey(message);
+    return message;
+}
+
+function getMessageKey(message) {
+    return `${message.timestamp ?? ''}:${message.text ?? ''}`;
+}
+
+function displayMessage(msg) {
     messagesContainer.innerHTML = '';
 
-    messages.forEach((msg, index) => {
-        const messageEl = document.createElement('div');
-        messageEl.className = 'message-item';
+    const messageEl = document.createElement('article');
+    messageEl.className = 'message-item';
 
+    const messageText = document.createElement('p');
+    messageText.className = 'message-text';
+    messageText.textContent = msg.text;
+    messageEl.appendChild(messageText);
+
+    if (msg.timestamp) {
         const timestamp = new Date(msg.timestamp).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
         });
+        const messageTime = document.createElement('time');
+        messageTime.className = 'message-time';
+        messageTime.dateTime = new Date(msg.timestamp).toISOString();
+        messageTime.textContent = timestamp;
+        messageEl.appendChild(messageTime);
+    }
 
-        messageEl.innerHTML = `
-            <div class="message-text">${escapeHtml(msg.text)}</div>
-            <div class="message-time">${timestamp}</div>
-        `;
-
-        messagesContainer.appendChild(messageEl);
-    });
+    messagesContainer.appendChild(messageEl);
 }
 
 function showLoading(show) {
@@ -141,17 +172,6 @@ function showError(message) {
 function clearError() {
     errorContainer.classList.add('hidden');
     errorContainer.textContent = '';
-}
-
-function escapeHtml(text) {
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 // Load messages on page load

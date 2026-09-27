@@ -4,68 +4,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whisper - Anonymous Messages</title>
+    <meta name="theme-color" content="#f3f4ef">
+    <title>Whisper - Leave something unsaid</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <h1>Whisper</h1>
-            <p class="subtitle">Leave something unsaid</p>
+    <div class="page-shell" id="top">
+        <header class="topbar">
+            <a class="brand" href="#top" aria-label="Whisper home">
+                <span class="brand-mark" aria-hidden="true">w</span>
+                <span>whisper</span>
+            </a>
         </header>
 
         <main>
-            <!-- Jar Visual -->
-            <div class="jar-container">
-                <svg class="jar" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Jar lid -->
-                    <rect x="60" y="20" width="80" height="15" rx="2" fill="#d4a574" stroke="#8b6914"
-                        stroke-width="2" />
-                    <rect x="55" y="35" width="90" height="8" rx="2" fill="#c9985f" stroke="#8b6914" stroke-width="1" />
-
-                    <!-- Jar body -->
-                    <path d="M 60 43 L 50 80 Q 50 260 100 270 Q 150 260 150 80 L 140 43 Z" fill="#f5f1e8"
-                        stroke="#8b7355" stroke-width="2" />
-
-                    <!-- Jar shine/glass effect -->
-                    <ellipse cx="75" cy="100" rx="15" ry="40" fill="white" opacity="0.1" />
-
-                    <!-- Messages container (dynamic) -->
-                    <g id="messages-jar"></g>
-                </svg>
-            </div>
-
-            <!-- Submit Section -->
-            <div class="submit-section">
-                <form id="submitForm">
-                    <textarea id="messageInput" placeholder="What's unsaid?" maxlength="500" required></textarea>
-                    <div class="form-bottom">
-                        <span class="char-count"><span id="charCount">0</span>/500</span>
-                        <button type="submit" class="btn-submit">Leave a message</button>
-                    </div>
-                </form>
-                <div id="submitStatus" class="status-message"></div>
-            </div>
-
-            <!-- Messages Display Section -->
-            <div class="messages-section">
-                <h2>Messages in the jar</h2>
-                <button id="fetchBtn" class="btn-fetch">Peek inside</button>
-
-                <div id="loadingContainer" class="loading-container hidden">
-                    <div class="spinner"></div>
-                    <p>Waking up the jar...</p>
+            <section class="intro-grid" aria-labelledby="page-title">
+                <div class="intro-copy">
+                    <!-- <p class="eyebrow">A LITTLE ROOM FOR THE UNSAID</p> -->
+                    <h1 id="page-title">Leave a thought anonymously</em></h1>
+                    <p class="intro-description">Leave a thought with no name attached. Read a few from someone out
+                        there. Nothing to explain.</p>
+                    <a class="text-link" href="#write">Leave your first whisper <span
+                            aria-hidden="true">&#8595;</span></a>
                 </div>
 
-                <div id="messagesContainer" class="messages-container"></div>
+                <figure class="jar-stage" aria-label="A glass jar holding folded paper notes">
+                    <svg class="jar-art" viewBox="0 0 360 440" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0" stop-color="#d9eee7" stop-opacity=".58" />
+                                <stop offset=".18" stop-color="#fff" stop-opacity=".12" />
+                                <stop offset=".48" stop-color="#c4e0d7" stop-opacity=".18" />
+                                <stop offset=".83" stop-color="#fff" stop-opacity=".38" />
+                                <stop offset="1" stop-color="#a5c9bc" stop-opacity=".58" />
+                            </linearGradient>
+                            <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+                                <stop stop-color="#bd7e50" />
+                                <stop offset=".45" stop-color="#d39a67" />
+                                <stop offset="1" stop-color="#a96641" />
+                            </linearGradient>
+                            <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+                                <stop stop-color="#fffef8" />
+                                <stop offset="1" stop-color="#e9e5d7" />
+                            </linearGradient>
+                            <clipPath id="jar-inside">
+                                <path d="M124 113h112l22 44 13 171c2 34-19 57-86 59-67-2-88-25-86-59l13-171z" />
+                            </clipPath>
+                        </defs>
 
-                <div id="errorContainer" class="error-message hidden"></div>
-            </div>
+                        <ellipse cx="180" cy="397" rx="116" ry="20" fill="#37564d" opacity=".13" />
+                        <g clip-path="url(#jar-inside)">
+                            <path d="M82 274l71-30 26 62-72 31z" fill="#d78769" stroke="#aa5e4a" stroke-width="2" />
+                            <path d="M151 238l70 15-14 77-71-14z" fill="url(#paper)" stroke="#c9c4b5"
+                                stroke-width="2" />
+                            <path d="M214 270l63-19 23 69-63 21z" fill="#e7bc72" stroke="#c09551" stroke-width="2" />
+                            <path d="M104 294l48-20m-38 34l40-17m32-35l34 7m-39 9l34 7m36 11l34-11m-28 25l32-10"
+                                fill="none" stroke="#9a9382" stroke-width="2" opacity=".55" />
+                            <path d="M161 247l1 63" stroke="#fff" stroke-width="3" opacity=".75" />
+                            <path d="M225 259l22 72" stroke="#fff4d6" stroke-width="3" opacity=".7" />
+                            <circle cx="127" cy="229" r="9" fill="#75988c" />
+                            <path d="M122 228l4 4 7-9" fill="none" stroke="#f4f5ee" stroke-width="2" />
+                        </g>
+
+                        <path d="M128 93V72c0-7 5-12 12-12h80c7 0 12 5 12 12v21" fill="url(#glass)" stroke="#8caf9f"
+                            stroke-width="3" />
+                        <path
+                            d="M124 92h112c12 0 22 8 25 20l18 53 13 151c4 46-29 78-112 80-83-2-116-34-112-80l13-151 18-53c3-12 13-20 25-20z"
+                            fill="url(#glass)" stroke="#7b9f91" stroke-width="4" />
+                        <path d="M122 105c-10 28-18 76-21 124l-10 89c-4 36 18 58 39 67" fill="none" stroke="#fff"
+                            stroke-width="8" stroke-linecap="round" opacity=".72" />
+                        <path d="M246 111c11 35 19 80 22 123l10 88c4 36-18 58-39 67" fill="none" stroke="#5e8a79"
+                            stroke-width="5" stroke-linecap="round" opacity=".36" />
+                        <path d="M111 352c21 18 54 27 69 27s48-9 69-27" fill="none" stroke="#fff" stroke-width="5"
+                            opacity=".65" />
+                        <rect x="112" y="83" width="136" height="21" rx="8" fill="#bfd8ce" stroke="#78998b"
+                            stroke-width="3" />
+                        <path d="M119 89h122" stroke="#f8fffb" stroke-width="3" opacity=".8" />
+                        <rect x="123" y="43" width="114" height="44" rx="8" fill="url(#wood)" stroke="#88583b"
+                            stroke-width="3" />
+                        <path d="M130 53c22 7 47-5 70 1 11 3 19 2 28-1M130 75c17-5 37 5 58 0 18-4 28 4 38 0" fill="none"
+                            stroke="#f0bd88" stroke-width="2" opacity=".46" />
+                        <rect x="118" y="81" width="124" height="9" rx="4" fill="#9d6342" stroke="#7c5039"
+                            stroke-width="2" />
+                        <path d="M137 118c-9 36-12 85-13 110" fill="none" stroke="#fff" stroke-width="4"
+                            stroke-linecap="round" opacity=".62" />
+                    </svg>
+                </figure>
+            </section>
+
+            <section class="compose-section" id="write" aria-labelledby="write-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="write-title">Leave a whisper</h2>
+                    </div>
+                    <p class="privacy-note"><span aria-hidden="true">&#9679;</span> Anonymous, always</p>
+                </div>
+
+                <form id="submitForm">
+                    <label class="visually-hidden" for="messageInput">Your anonymous message</label>
+                    <textarea id="messageInput" name="message" placeholder="What's on your mind?" maxlength="500"
+                        required></textarea>
+                    <div class="form-bottom">
+                        <span class="char-count"><span id="charCount">0</span> / 500</span>
+                        <button type="submit" class="btn-submit">Leave it here <span
+                                aria-hidden="true">&#8594;</span></button>
+                    </div>
+                </form>
+                <div id="submitStatus" class="status-message" role="status" aria-live="polite"></div>
+            </section>
+
+            <section class="messages-section" aria-labelledby="messages-title">
+                <div class="messages-heading">
+                    <div>
+                        <h2 id="messages-title">Notes from out there</h2>
+                    </div>
+                    <button id="fetchBtn" class="btn-fetch" type="button"><span aria-hidden="true">&#9711;</span> Draw
+                        a note</button>
+                </div>
+
+                <div id="loadingContainer" class="loading-container hidden" role="status" aria-live="polite">
+                    <div class="spinner" aria-hidden="true"></div>
+                    <p>Waking up the jar...</p>
+                </div>
+                <div id="messagesContainer" class="messages-container" aria-live="polite"></div>
+                <div id="errorContainer" class="error-message hidden" role="alert"></div>
+            </section>
         </main>
 
-        <footer>
-            <p>All messages are anonymous and will be treasured</p>
+        <footer class="site-footer">
+            <span>Whisper <span aria-hidden="true">&#183;</span> No names, no noise.</span>
         </footer>
     </div>
 
